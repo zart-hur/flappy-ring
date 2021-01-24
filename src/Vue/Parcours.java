@@ -9,10 +9,16 @@ public class Parcours {
 	
 	private static final Random rand = new Random(); //variable aleatoire pour pouvoir utiliser la bibliothèque java.util.Random.
 	
-	private  ArrayList<Point> ligne= new ArrayList<Point>();//la liste de points quel l'on relira pour faire le parcours.
+	private  ArrayList<Point> ligne= new ArrayList<Point>();//la liste de points que l'on relira pour faire le parcours.
 	
-	private final int ESPACE_MIN = 100; //on veut que chaques abscisses des points soit au minimum espaces de 100.
+	private final int ESPACE_MIN = 150; //on veut que chaques abscisses des points soit au minimum espaces de 100.
 	private final int DEPART = Affichage.getOrdOvale()+50;//le depart du parcours sera au bas de l'ovale
+	
+	private final static int AVANCE = 5;
+	private static  int position =0;
+	
+	
+	
 	
 	/**Constructeur*/
 	public Parcours() {
@@ -26,6 +32,34 @@ public class Parcours {
 		return this.ligne;
 	}
 
+	
+	
+	public int getPosition() {
+		return position;
+	}
+	
+	public int getEspaceMin() {
+		return this.ESPACE_MIN;
+	}
+	
+	public static void setPosition() {
+		position = position+AVANCE;
+	}
+	
+	public void AjouteFindeListeRandomP() {
+		
+		int x= (ligne.get(ligne.size()-1).x)+rand.nextInt(100)+ESPACE_MIN;//abscisse du dernier point de la liste auquel on rajoute une random val(+ESPACE_MIN)
+		//ligne suivante: l'ordonnee aleatoire du point est bornee en fonction de la taille de la fenetre et de l'ovale.(/!\ borne 2fois utilisee)
+		int y=rand.nextInt((Affichage.getHauteurFenetre()/2)+Affichage.getTailleOvale())+(Affichage.getTailleOvale()/4); 
+		Point p = new Point(x,y);
+		ligne.add(ligne.size(),p); // on ajoute le point aux coordonees "aleatoires" a la fin de l'arraylist ligne
+		
+		
+		
+	}
+	
+	
+	
 	
 	/**Pseudo-code de initLigne :
 	 * void initLigne(){
@@ -52,8 +86,8 @@ public class Parcours {
 		
 		while(x<(Affichage.getLargeurFenetre()*2)) { //on veut creer des point jusqu'a 2 fois la largeur de la fenetre
 			x+=rand.nextInt(100)+ESPACE_MIN;
-			//ligne suivante: les ordonnees aleatoire des points sont bornees en fonction de la taille de la fenetre et de l'ovale.
-			int y=rand.nextInt((Affichage.getHauteurFenetre()-(Affichage.getTailleOvale())))+(Affichage.getTailleOvale()); 
+			//ligne suivante: les ordonnees aleatoire des points sont bornees en fonction de la taille de la fenetre et de l'ovale.(/!\ borne 2fois utilisee)
+			int y=rand.nextInt((Affichage.getHauteurFenetre()/2)+Affichage.getTailleOvale())+(Affichage.getTailleOvale()/4); 
 			Point p = new Point(x,y);
 			ligne.add(index,p); // on ajoute le point aux coordonees "aleatoires" a l'arraylist ligne
 			index++;

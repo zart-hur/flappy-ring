@@ -10,8 +10,9 @@ import Vue.Parcours;
 public class Etat {
 private static int hauteur = Affichage.getOrdOvale();
 private static Parcours parcours = new Parcours();
-private final int SAUT=40;
+private final int SAUT=60;
 private final static int GRAVITE=4;
+
 
 public Etat() {
 	//affichage=aff;
@@ -25,9 +26,24 @@ public int getHauteur(){
 	return hauteur;
 }
 
-/** getParcours permet de recuperer l'Arraylist<Point> ligne */
+public int getPosition() {
+	return parcours.getPosition();
+}
+/** 
+ * getParcours permet de recuperer l'Arraylist<Point> ligne
+ *  */
 public ArrayList<Point> getParcours() {
-	return parcours.getLigne();
+	ArrayList<Point> ligne= parcours.getLigne();
+	for(int i=0;i<ligne.size();i++) {
+		double newX =ligne.get(i).getX()- parcours.getPosition();
+		//si le point va pour sortir de la fenetre, on le supprime et on en cree un nouveau en bout de liste
+		if(newX<(-(parcours.getEspaceMin())*2)) { //parce que 0 ne suffisait pas, en partie en raison de cet ESPACE_MIN (ce n'est pas tres clair non )
+			ligne.remove(i);//on supprime le points (quand il va pour sortir de la fenetre)		
+			parcours.AjouteFindeListeRandomP();//on rajoute un point a la fin de la liste
+		}
+		
+	}
+	return ligne;
 }
 
 
