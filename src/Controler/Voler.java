@@ -16,8 +16,6 @@ public class Voler extends Etat implements Runnable {
 		
 	}
 
-
-	
 	
 
  
