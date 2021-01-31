@@ -21,9 +21,11 @@ public class Controls implements MouseListener {
  
 		/** on veut que la position du cercle soit modifiée a chaques clicks (le cercle saute) */	
 		 public void mouseClicked(MouseEvent e) {
-			this.etat.jump();   //cest la hauteur du cercle dans etat que l'on modifie		      
-			affichage.repaint();
-			
+			 if(!this.etat.testPerdu()) {
+				 this.etat.jump();   //cest la hauteur du cercle dans etat que l'on modifie	
+				 affichage.revalidate();
+				 affichage.repaint();	 
+			}
 		}
 
 		 

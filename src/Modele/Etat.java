@@ -2,61 +2,89 @@ package Modele;
 
 
 import java.awt.Point;
-import java.util.ArrayList;
+
 
 import Vue.Affichage;
-import Vue.Parcours;
 
 public class Etat {
-private static int hauteur = Affichage.getOrdOvale();
-private static Parcours parcours = new Parcours();
-private final int SAUT=60;
-private final static int GRAVITE=4;
+	private  int hauteur = Affichage.getOrdOvale();
+	private  Parcours parcours ;
+	private final int SAUT=50;
+	private  int sautDuPerdu;
+	private final static int GRAVITE=2;
+	public boolean flagTestPerdu = false;
+	public boolean perduHaut = false;
+	
 
 
-public Etat() {
-	//affichage=aff;
-	//new Thread(new Voler(this,aff)).start();
-	//new Thread(new Voler(this)).start();
-}
-/**
- * fonction qui recupere la valeur de hauteur
- **/
-public int getHauteur(){ 
-	return hauteur;
-}
+	public Etat(Parcours parc) {
+		this.parcours =parc;
 
-public int getPosition() {
-	return parcours.getPosition();
-}
-/** 
- * getParcours permet de recuperer l'Arraylist<Point> ligne
- *  */
-public ArrayList<Point> getParcours() {
-	ArrayList<Point> ligne= parcours.getLigne();
-	for(int i=0;i<ligne.size();i++) {
-		double newX =ligne.get(i).getX()- parcours.getPosition();
-		//si le point va pour sortir de la fenetre, on le supprime et on en cree un nouveau en bout de liste
-		if(newX<(-(parcours.getEspaceMin())*2)) { //parce que 0 ne suffisait pas, en partie en raison de cet ESPACE_MIN (ce n'est pas tres clair non )
-			ligne.remove(i);//on supprime le points (quand il va pour sortir de la fenetre)		
-			parcours.AjouteFindeListeRandomP();//on rajoute un point a la fin de la liste
-		}
+	}
+	/**
+	 * fonction qui recupere la valeur de hauteur
+	 **/
+	public int getHauteur(){ 
+		return hauteur;
+	}
+
+
+	public  boolean getflagTestperdu() {
+		return this.flagTestPerdu;
+	}
+	
+	public  boolean getPerduDuHaut() {
+		return this.perduHaut;
+	}
+
+
+	public boolean testPerdu() {
+		int indexP1= parcours.getPointProches();
+		int indexP2= indexP1+1;
+		Point p1 =parcours.getLigneBas().get(indexP1);
+		Point p2 =parcours.getLigneBas().get(indexP2);	
+	
+	
 		
+		float pente = ((p1.y) - (p2.y) )/ ((float)(p1.x) - (float)(p2.x)); //calcul de la pente de la droite, la meme pour la ligne du bas et la ligne du haut 
+		float pointyDeLaDroiteBas = ( - pente *(p1.x-Affichage.getAbsOvale()) + p1.y ); 
+		float pointyDeLaDroiteHaut = ( - pente *(p1.x-Affichage.getAbsOvale()) + (p1.y-parcours.getLargeurCaverne()) );// cest  ca normalement ...
+		
+	
+		
+		if(pointyDeLaDroiteBas <= (hauteur+Affichage.getTailleOvale())){	
+			return true;
+		}
+		else if(pointyDeLaDroiteHaut >= hauteur){
+			this.sautDuPerdu=(int) pointyDeLaDroiteHaut;
+			return true;
+		}
+		else {	
+			return false;
+		}
 	}
-	return ligne;
-}
 
-
-public void jump(){ 
-	if((hauteur) > 0)  // pour que l'on ne puisse pas sortir de la fenettre
-		hauteur=hauteur-this.SAUT;
-}
-
-public static void moveDown() {
-	if((hauteur) < (Affichage.getHauteurFenetre()-Affichage.getTailleOvale())) {  // pour que l'on ne puisse pas sortir de la fenettre
-		hauteur=hauteur+GRAVITE;
+	
+	
+	public void jump(){ 	
+		if(testPerdu()) {
+			this.hauteur=this.sautDuPerdu;		
+			this.perduHaut = true;
+			this.flagTestPerdu = true;
+		}
+		else
+			hauteur=hauteur-this.SAUT;
 	}
-}
+	
+
+	public  void moveDown() {
+		if(testPerdu()) {
+			this.flagTestPerdu = true;
+		}
+		if((hauteur) < (Affichage.getHauteurFenetre()-Affichage.getTailleOvale())) {  // pour que l'on ne puisse pas sortir de la fenettre
+			hauteur=hauteur+GRAVITE;
+		}
+	}
 
 }
 
