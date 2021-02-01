@@ -30,8 +30,7 @@ public class Main {
 		
 		/** creation des Threads*/
 		new Thread(new Voler(etat,affichage)).start();
-		new Thread(new Avancer(parcours,affichage)).start();
-				
-	  }	
-	
+		new Thread(new Avancer(parcours,affichage)).start();			
+	  }		
+
 }

@@ -42,7 +42,6 @@ public class Voler implements Runnable {
 		}
 	}
 
-
 }
 
 

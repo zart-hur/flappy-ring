@@ -28,7 +28,6 @@ public class Controls implements MouseListener {
 	}
 
 
-
 	/**autres methodes demandees par l'interface**/
 
 	public void mouseEntered(MouseEvent arg0) {	

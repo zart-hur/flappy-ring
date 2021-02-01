@@ -170,4 +170,5 @@ public class Affichage extends JPanel {
 		dessineParcours(g);
 		dessineScore(g);
 	}
+
 }
